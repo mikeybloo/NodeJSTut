@@ -51,6 +51,25 @@ app.get('/api/customers/:id', async(req, res) => {
     }
 });
 
+app.get('/api/orders/:id', async(req, res) => {
+    console.log({ 
+        requestParams: req.params,
+        requestQuery: req.query
+    });
+    try{
+        const orderId = req.params.id;
+        const result = await Customer.findOne({ 'orders._id': orderId });
+        console.log(result);
+        if(!result){
+            res.status(404).json({ error: 'Order not found' });
+        } else {
+            res.json({result});
+        }        
+    } catch(e){
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+});
+
 app.post('/', (req, res) => {
     res.send('This is a post request');
 });
@@ -85,6 +104,29 @@ app.patch('/api/customers/:id', async (req, res) => {
     } catch(e){
         console.log(e.message);
         res.status(500).json({ error: 'Something went wrong' });
+    }
+});
+
+app.patch('/api/orders/:id', async (req, res) => {
+    console.log(req.params);
+    const orderId = req.params.id;
+    req.body._id = orderId;
+    try{
+        const result = await Customer.findOneAndUpdate(
+            { 'orders._id': orderId },
+            { $set: { 'orders.$': req.body }},
+            { new: true }
+        );
+        console.log(result);
+
+        if(result){
+            res.json(result);
+        } else {
+            res.status(404).json({ error: 'Something went wrong' });
+        }
+    } catch(e){
+        console.log(e.message);
+        res.status(500).json({ error: "Something went wrong" });
     }
 });
 
