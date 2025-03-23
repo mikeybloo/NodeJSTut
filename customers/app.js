@@ -1,10 +1,13 @@
 const express = require('express');
 const Customer = require('./models/customer');
 const mongoose = require('mongoose');
+const cors = require('cors');
+const customer = require('./models/customer');
 
 const app = express();
 mongoose.set('strictQuery', false);
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 const CONN = process.env.CONNECTION;
 
 app.get('/', (req, res) => {
-    res.send(customer);
+    res.send("Hello :)");
 });
 
 app.get('/api/customers', async (req, res) => {
@@ -66,10 +69,21 @@ app.post('/api/customers', async (req, res) => {
 app.put('/api/customers/:id', async (req, res) => {
     try{
         const customerId = req.params.id;
-        const result = await Customer.replaceOne({ _id: customerId }, req.body);
-        console.log(result);
-        res.json({ updatedCount: result.modifiedCount });
+        const customer = await Customer.findOneAndReplace({ _id: customerId }, req.body, { new: true });
+        res.json({ customer });
     } catch(e){
+        console.log(e.message);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+});
+
+app.patch('/api/customers/:id', async (req, res) => {
+    try{
+        const customerId = req.params.id;
+        const customer = await Customer.findOneAndUpdate({ _id: customerId }, req.body, { new: true });
+        res.json({ customer });
+    } catch(e){
+        console.log(e.message);
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
