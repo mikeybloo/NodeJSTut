@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
-
-const customerSchema = new mongoose.Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+const customerSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true
@@ -13,5 +14,4 @@ const customerSchema = new mongoose.Schema({
         }
     ]
 });
-
-module.exports = mongoose.model('Customers', customerSchema);
+exports.default = (0, mongoose_1.model)('Customers', customerSchema);

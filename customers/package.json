@@ -4,11 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon app.js"
+    "start": "npx nodemon app.js",
+    "watch": "tsc -p tsconfig.json --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/express": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -17,6 +19,8 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/node": "^22.13.11",
     "typescript": "^5.8.2"
   }
 }
